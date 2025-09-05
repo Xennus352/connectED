@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ConnectEd
+
+ConnectEd is a **Next.js** application integrated with **Supabase** that enables **communication and coordination between Parents, Students, Drivers, Teachers, and Admins**. This platform allows messaging, student location tracking, attendance management, and homework assignments in a single system.
+
+---
+
+## Features
+
+- Role-based contact lists: Admins, Teachers, Parents, Students, and Drivers.
+- Real-time chat with unread message indicators.
+- Student location tracking for drivers and parents.
+- Attendance tracking for teachers and students.
+- Homework management by teachers.
+- Profile management with avatars and basic information.
+
+---
+
+## Tech Stack
+
+- **Frontend:** Next.js 14+ (React 18+)
+- **Backend:** Supabase (PostgreSQL)
+- **Styling:** Tailwind CSS, DaisyUI
+- **Authentication:** Supabase Auth
+- **Realtime:** Supabase Realtime for messaging
+
+---
+
+## Prerequisites
+
+- Node.js 20+
+- npm or yarn
+- Supabase account
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
 
 ```bash
+git clone https://github.com/yourusername/connected.git
+cd connected
+
+### 2. Install dependencies
+npm install
+# or
+yarn
+
+3. Setup Supabase
+
+Create a new project in Supabase
+.
+
+Create the required tables:
+
+Table structure:
+
+profiles:
+id (uuid), username, full_name, avatar_url, role
+
+students:
+id (uuid), student_id_number, date_of_birth, enrollment_date, class_id
+
+student_parents:
+student_id (uuid), parent_id (uuid), relationship
+
+drivers:
+id (uuid), driver_id_number, license_number, license_expiry_date, assigned_vehicle, hire_date, created_at
+
+teachers:
+id (uuid), teacher_id_number, hire_date, created_at
+
+classes:
+id (uuid), school_id, name, academic_year, head_teacher_id
+
+subjects:
+id (uuid), school_id, name, grade_level
+
+teacher_classes:
+teacher_id (uuid), class_id (uuid), subject_id (uuid)
+
+student_locations:
+id (uuid), student_id (uuid), driver_id (uuid), latitude, longitude, address
+
+attendances:
+id (uuid), student_id (uuid), class_id (uuid), date, status, noted_by
+
+homeworks:
+id (uuid), class_id (uuid), title, description, due_date, assigned_by, created_at
+
+messages:
+id (uuid), sender_id (uuid), recipient_id (uuid), class_id (uuid), content, is_read (boolean default false)
+
+### Obtain your Supabase URL and API Key from the project settings.
+
+### Configure environment variables
+
+### Create a .env.local file in the project root:
+
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+### Run development server
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
