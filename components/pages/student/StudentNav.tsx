@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
 import { getCurrentUserProfile } from "@/utils/supabase/user";
-import { Bell } from "lucide-react";
+import { Bell, BookA } from "lucide-react";
 
 import React, { useEffect, useState } from "react";
 
@@ -59,7 +59,7 @@ const StudentNav = () => {
             className="bg-gradient-to-r from-[#56CCF2] to-[#2F80ED] bg-clip-text text-transparent 
           relative inline-block hover:before:w-full hover:before:transition-all hover:before:duration-300 before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:w-0 before:h-[2px] before:bg-[#3273ff] before:transform before:-translate-x-1/2 font-bold text-2xl italic cursor-alias"
           >
-            {profile.full_name}
+            <BookA />{profile.full_name}
           </p>
         </div>
         <div className="flex-1 px-2">

@@ -1,10 +1,8 @@
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-
-
+import FloatingChat from "@/components/ui/FloatingChat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,16 +24,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
-
   return (
     <html lang="en" data-theme="aqua">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-            <Providers>{children}</Providers>
-
+        <Providers>{children}</Providers> <FloatingChat />
       </body>
     </html>
   );

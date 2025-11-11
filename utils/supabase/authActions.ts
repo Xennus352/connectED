@@ -36,6 +36,7 @@ export function useAuth() {
         router.push("/teacher");
         break;
       case "parent":
+        
         router.push("/parent");
         break;
       case "student":
@@ -45,7 +46,7 @@ export function useAuth() {
         router.push("/driver");
         break;
       default:
-        router.push("/dashboard");
+        router.push(profileData.role);
     }
   };
 

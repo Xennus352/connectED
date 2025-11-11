@@ -41,3 +41,23 @@ input[type=number] {
   background: transparent !important;
   border: none !important;
 }
+
+
+.markdown-body p {
+  margin: 0.25rem 0; /* small spacing between paragraphs */
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0.25rem 0 0.25rem 1rem; /* tighten list spacing */
+}
+
+.markdown-body li {
+  margin: 0.125rem 0;
+}
+
+.markdown-body pre {
+  margin: 0; /* no extra margin for code blocks */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
