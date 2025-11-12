@@ -46,7 +46,7 @@ export function useAuth() {
         router.push("/driver");
         break;
       default:
-        router.push(profileData.role);
+        router.push('/login');
     }
   };
 
