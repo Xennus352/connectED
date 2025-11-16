@@ -12,7 +12,7 @@ const StudentContainer = ({ searchTerm }: { searchTerm: string }) => {
   const [teacherClasses, setTeacherClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 1️⃣ Get current teacher profile
+  //  Get current teacher profile
   useEffect(() => {
     (async () => {
       const data = await getCurrentUserProfile();
@@ -20,7 +20,7 @@ const StudentContainer = ({ searchTerm }: { searchTerm: string }) => {
     })();
   }, []);
 
-  // 2️⃣ Fetch teacher_classes once profile is ready
+  //  Fetch teacher_classes once profile is ready
   useEffect(() => {
     if (!profile?.id) return;
 

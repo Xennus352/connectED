@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
 import { getCurrentUserProfile } from "@/utils/supabase/user";
-import { Bell, ContactRound } from "lucide-react";
+import { Bell } from "lucide-react";
 
 import React, { useEffect, useState } from "react";
 
@@ -14,7 +14,10 @@ const TeacherNav = ({
 }) => {
   // current user information
   const [userData, setUserData] = useState<any>(null);
-  const [hasNewMessage, setHasNewMessage] = useState<boolean>(false);
+  const [hasNewMessage, setHasNewMessage] = useState<{
+    message: any;
+    sender: any;
+  } | null>(null);
   const supabase = createClient();
   useEffect(() => {
     (async () => {
@@ -36,10 +39,20 @@ const TeacherNav = ({
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
-        (payload) => {
+        async (payload) => {
           const newMsg = payload.new;
           if (newMsg.recipient_id === profile.id) {
-            setHasNewMessage(true);
+            // Get sender profile details
+            const { data: sender, error } = await supabase
+              .from("profiles")
+              .select("id, full_name")
+              .eq("id", newMsg.sender_id)
+              .single();
+
+            setHasNewMessage({
+              message: newMsg,
+              sender: sender || null,
+            });
           }
         }
       )
@@ -65,7 +78,7 @@ const TeacherNav = ({
             className="bg-gradient-to-r from-[#56CCF2] to-[#2F80ED] bg-clip-text text-transparent 
           relative inline-block hover:before:w-full hover:before:transition-all hover:before:duration-300 before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:w-0 before:h-[2px] before:bg-[#3273ff] before:transform before:-translate-x-1/2 font-bold text-2xl italic cursor-alias"
           >
-            <ContactRound /> {profile.full_name}
+            T-{profile.full_name}
           </p>
         </div>
         <div className="flex-1 px-2">
@@ -78,16 +91,32 @@ const TeacherNav = ({
               onChange={(e) => {
                 setSearchTerm(e.target.value);
               }}
-              placeholder="Search with name , class , studentId .  .  ."
+              placeholder="Search name , class , studentId .  .  ."
               className="input focus:outline-none"
             />
 
-            {hasNewMessage && (
-              <p className="text-sm animate-pulse flex items-center gap-2">
-                {" "}
-                <Bell /> New Message arrive!
-              </p>
-            )}
+            {/*  Show sender name */}
+            <div className="relative group cursor-pointer">
+              <Bell size={22} />
+              {hasNewMessage && (
+                <>
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                   {/* Tooltip */}
+                  <div
+                    className="
+      absolute left-1 -translate-x-1/2 top-8
+      whitespace-nowrap
+      bg-black text-white text-xs px-3 py-1 rounded-lg shadow-lg
+      opacity-0 group-hover:opacity-100
+      scale-95 group-hover:scale-100
+      transition-all duration-200
+    "
+                  >
+                     📩{hasNewMessage?.sender?.full_name.slice(0, 8)}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

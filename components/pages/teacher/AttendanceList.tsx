@@ -20,7 +20,7 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
   const fetchStudents = async () => {
     setLoading(true);
 
-    // 1. Get logged-in teacher profile
+    //  Get logged-in teacher profile
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -41,7 +41,7 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
       return;
     }
 
-    // 2. Get teacher’s assigned classes
+    //  Get teacher’s assigned classes
     const { data: teacherClasses } = await supabase
       .from("teacher_classes")
       .select("class_id")
@@ -55,7 +55,7 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
 
     const classIds = teacherClasses.map((tc) => tc.class_id);
 
-    // 3. Fetch students
+    //  Fetch students
     const { data: studentsData, error } = await supabase
       .from("students")
       .select(
@@ -99,11 +99,16 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
   useEffect(() => {
     fetchStudents();
   }, []);
-
   // Filtering
-  const filteredStudents = students.filter((student) =>
-    student.student_id_number?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredStudents = students.filter((student) => {
+    const term = searchTerm.toLowerCase();
+
+    const fullName = (student.profiles?.full_name || "").toLowerCase();
+    const className = (student.classes?.name || "").toLowerCase();
+
+    // return true if either name or class matches the search term
+    return fullName.includes(term) || className.includes(term);
+  });
 
   // Pagination
   const indexOfLast = currentPage * studentsPerPage;
@@ -129,7 +134,8 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
 
   // Mark attendance with upsert
   const markAttendance = async (status: "present" | "absent") => {
-    if (selectedStudents.length === 0) return alert("Select students first!");
+    if (selectedStudents.length === 0)
+      return console.log("Select students first!");
 
     const {
       data: { user },
@@ -160,9 +166,9 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
 
     if (error) {
       console.error(error);
-      alert("Error saving attendance");
+      console.log("Error saving attendance");
     } else {
-      alert(`Marked ${status} for ${rows.length} students`);
+      console.log(`Marked ${status} for ${rows.length} students`);
       setSelectedStudents([]);
       fetchStudents(); // Refresh statuses
     }
@@ -189,7 +195,6 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
               </label>
             </th>
             <th>Name</th>
-            <th>Student ID</th>
             <th>Class</th>
             <th>Status</th>
           </tr>
@@ -219,7 +224,10 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
                         <img
-                          src={student.profiles?.avatar_url || "/default-avatar.png"}
+                          src={
+                            student.profiles?.avatar_url ||
+                            "/default-avatar.png"
+                          }
                           alt={student.profiles?.full_name}
                         />
                       </div>
@@ -234,9 +242,10 @@ const AttendanceList: React.FC<AttendanceListProps> = ({ searchTerm = "" }) => {
                     </div>
                   </div>
                 </td>
-                <td>{student.student_id_number}</td>
                 <td>{student.classes?.name || "No Class"}</td>
-                <td>{student.todayStatus || "Not marked"}</td>
+                <td className="uppercase">
+                  {student.todayStatus || "Not marked"}
+                </td>
               </tr>
             ))
           ) : (

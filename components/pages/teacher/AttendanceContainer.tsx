@@ -1,10 +1,10 @@
 import React from "react";
 import AttendanceList from "./AttendanceList";
 
-const AttendanceContainer = () => {
+const AttendanceContainer = ({ searchTerm }: { searchTerm: string }) => {
   return (
     <>
-      <AttendanceList searchTerm={''} />
+      <AttendanceList searchTerm={searchTerm} />
     </>
   );
 };

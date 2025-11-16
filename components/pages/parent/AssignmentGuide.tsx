@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { CheckCircle, X } from "lucide-react";
 
 interface Profile {
   full_name: string;
@@ -15,6 +16,7 @@ interface Homework {
   due_date: string;
   created_at: string;
   assigned_by: string;
+  isDone: boolean;
   profiles: Profile; // teacher info
   teacher?: Profile;
 }
@@ -63,6 +65,7 @@ const AssignmentGuide: React.FC<{ parentId: string }> = ({ parentId }) => {
           title,
           description,
           due_date,
+          isDone,
           created_at,
           assigned_by,
           profiles (
@@ -102,15 +105,15 @@ const AssignmentGuide: React.FC<{ parentId: string }> = ({ parentId }) => {
   useEffect(() => {
     fetchHomeworks();
   }, []);
-
-  if (loading) return <p>Loading assignments...</p>;
+  console.log(students);
+  if (loading) return <p>Loading homeworks...</p>;
 
   return (
     <div className="p-4 space-y-6">
       {students.map((student) => (
         <div
           key={student.id}
-          className="p-4 border rounded-lg shadow  space-y-4"
+          className="p-4 border rounded-lg shadow   space-y-4"
         >
           <h2 className="text-lg font-bold">
             {student.profiles.full_name} – {student.classes?.name} (
@@ -118,16 +121,26 @@ const AssignmentGuide: React.FC<{ parentId: string }> = ({ parentId }) => {
           </h2>
 
           {student.classes?.homeworks?.length > 0 ? (
-            <ul className="list-disc pl-6 space-y-2">
+            <ul className="list-disc pl-6 space-y-2 flex flex-col-reverse ">
               {student.classes.homeworks.map((hw) => (
-                <li key={hw.id} className="text-sm space-y-2">
-                  <p className="font-semibold text-xl">{hw.title}</p>
-                  <p className="text-gray-600 text-lg">{hw.description}</p>
-                  <p className="text-xs text-red-500">
-                    Due: {new Date(hw.due_date).toLocaleDateString()}
-                  </p>
+                <li key={hw.id} className="text-sm space-y-2 border-b-2 m-2">
+                  <div className="flex justify-between">
+                    <p className="font-semibold text-xl">{hw.title}</p>
+                    <p className="font-semibold text-xl">
+                      {hw.isDone &&  <CheckCircle className="text-green-600"/>}
+                    </p>
+                  </div>
+                  <p className="text-gray-400 text-lg">{hw.description}</p>
+                  <div className=" flex items-center text-2xl gap-4">
+                    <p className="text-xs text-white-500">
+                      Start: {new Date(hw.created_at).toLocaleDateString()}
+                    </p>
+                    <p className="text-xs text-red-500">
+                      Due: {new Date(hw.due_date).toLocaleDateString()}
+                    </p>
+                  </div>
                   {hw.teacher && (
-                    <p className="text-xs italic text-blue-600 flex items-center gap-2">
+                    <p className="text-xs italic mb-1 text-blue-600 flex items-center gap-2">
                       <img
                         src={hw.teacher.avatar_url || "/default-avatar.png"}
                         alt="teacher avatar"

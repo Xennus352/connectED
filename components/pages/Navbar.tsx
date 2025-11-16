@@ -157,7 +157,7 @@ const Navbar = () => {
         </div>
         <div className="flex-none">
           {/* actions button  */}
-          <button
+          {/* <button
             onClick={() => setHasNewNotification(false)}
             className="btn relative btn-neutral btn-outline hover:btn-primary text-white rounded-lg mx-2 "
           >
@@ -165,7 +165,7 @@ const Navbar = () => {
             {hasNewNotification && (
               <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full animate-ping"></span>
             )}
-          </button>
+          </button> */}
           <Link
             onClick={() => setHasNewMessage(false)}
             href={"/dashboard/admin/message"}

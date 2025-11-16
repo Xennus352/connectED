@@ -1,10 +1,19 @@
+import { ParentStudentRelation } from "@/types/Type";
 import { Profile } from "@/types/types";
 import { useAuth } from "@/utils/supabase/authActions";
+
 import { LogOut } from "lucide-react";
 import React from "react";
 
-const UserProfileCard = ({ profile }: { profile: Profile }) => {
+const UserProfileCard = ({
+  profile,
+  students,
+}: {
+  profile: Profile;
+  students?: ParentStudentRelation[];
+}) => {
   const { signOut } = useAuth();
+
   return (
     <div className="p-0 overflow-hidden">
       {/* Header with background and profile image */}
@@ -129,6 +138,38 @@ const UserProfileCard = ({ profile }: { profile: Profile }) => {
               <p className="text-base-content/80 capitalize">{profile.role}</p>
             </div>
           </div>
+
+          <div className="flex items-center p-3 bg-base-200 rounded-lg">
+            <div className="flex-shrink-0 w-8">
+              <svg
+                className="w-6 h-6 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-base-content">Child</p>
+              <div className="text-base-content/80 capitalize">
+                {students && students.length > 0
+                  ? students.map((item) => (
+                      <div key={item.id} className="mb-2">
+                        {item.students?.profiles?.full_name} -{" "}
+                        {item.students?.classes?.name}
+                      </div>
+                    ))
+                  : "None"}
+              </div>
+            </div>
+          </div>
+          {/* sign out button  */}
           <div>
             <button
               onClick={() => {

@@ -212,10 +212,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
                 <p>
                   <strong>Class:</strong> {selectedStudent.class.name}
                 </p>
-                <p>
-                  <strong>Student ID:</strong>{" "}
-                  {selectedStudent.student_id_number}
-                </p>
+               
                 <p>
                   <strong>Date of Birth:</strong>{" "}
                   {selectedStudent.date_of_birth}

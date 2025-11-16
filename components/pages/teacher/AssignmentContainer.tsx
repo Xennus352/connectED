@@ -13,6 +13,7 @@ interface Homework {
   due_date: string;
   assigned_by: string;
   created_at: string;
+  isDone: boolean;
   profiles?: {
     id: string;
     full_name: string;
@@ -26,7 +27,6 @@ const AssignmentContainer = () => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const [editingHomework, setEditingHomework] = useState<Homework | null>(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4; // homeworks per page
   const totalPages = Math.ceil(homeworks.length / pageSize);
@@ -140,6 +140,32 @@ const AssignmentContainer = () => {
     modal.showModal();
   };
 
+  // mark home done
+  const toggleHomeworkDone = async (id: string) => {
+    // Get current value
+    const { data, error: fetchErr } = await supabase
+      .from("homeworks")
+      .select("isDone")
+      .eq("id", id)
+      .single();
+
+    if (fetchErr) {
+      console.error("Fetch error:", fetchErr.message);
+      return;
+    }
+
+    //Toggle the boolean
+    const { error: updateErr } = await supabase
+      .from("homeworks")
+      .update({ isDone: !data.isDone })
+      .eq("id", id);
+
+    if (updateErr) {
+      console.error("Toggle error:", updateErr.message);
+    }
+    fetchHomeworks();
+  };
+
   if (loading)
     return (
       <div className="flex justify-center items-center h-64">
@@ -164,7 +190,6 @@ const AssignmentContainer = () => {
                 <th>Title</th>
                 <th>Description</th>
                 <th>Due Date</th>
-                <th>Assigned By</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -175,12 +200,12 @@ const AssignmentContainer = () => {
                     <td>{(currentPage - 1) * pageSize + index + 1}</td>
                     <td className="font-semibold">{hw.title}</td>
                     <td>{hw.description}</td>
+
                     <td>
                       {hw.due_date
                         ? new Date(hw.due_date).toLocaleDateString()
                         : "N/A"}
                     </td>
-                    <td>{hw?.profiles?.full_name || "Unknown"}</td>
                     <td className="flex gap-2">
                       <button
                         onClick={() => handleEditHomework(hw)}
@@ -193,6 +218,13 @@ const AssignmentContainer = () => {
                         className="btn btn-outline rounded-lg btn-sm btn-error"
                       >
                         Delete
+                      </button>
+                      <button
+                        // disabled={hw.isDone}
+                        onClick={() => toggleHomeworkDone(hw.id)}
+                        className="btn btn-outline rounded-lg btn-sm btn-success"
+                      >
+                        {hw.isDone ? "Done" : "Mark"}
                       </button>
                     </td>
                   </tr>

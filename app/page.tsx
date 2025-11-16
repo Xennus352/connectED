@@ -51,7 +51,7 @@ export default function Home() {
 
   return (
     <main>
-      <Navbar />
+     
       <h1 className="text-center text-3xl">Welcome from Connect ED</h1>
       <div className="flex items-center justify-center m-3">
         <LoadingCard />

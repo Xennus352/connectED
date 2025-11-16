@@ -4,7 +4,7 @@ import UserProfileCard from "@/components/ui/UserProfileCard";
 import { getCurrentUserProfile } from "@/utils/supabase/user";
 import React, { useEffect, useState } from "react";
 
-const ParentProfile = () => {
+const ParentProfile =  () => {
   // current user information
   const [userData, setUserData] = useState<any>(null);
 
@@ -26,10 +26,13 @@ const ParentProfile = () => {
 
   // destructure profile for easier access
   const profile = userData.profile;
+  const students = userData.students;
+
+  console.log(userData)
 
   return (
     <div>
-      <UserProfileCard profile={profile} />
+      <UserProfileCard profile={profile} students={students} />
     </div>
   );
 };

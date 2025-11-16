@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import useFetchCurrentTeacherClassSub from "@/hooks/useFetchCurrentTeacherClassSub";
 
 interface HomeworkCreateFormProps {
   userId: string;
@@ -20,6 +21,29 @@ export default function HomeworkCreateForm({
   const [classes, setClasses] = useState<any[]>([]);
   const [selectedClass, setSelectedClass] = useState<string>("");
 
+  // current teacher's related classes and subjects
+  const [relatedClassSub, setRelatedClassSub] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const result = await useFetchCurrentTeacherClassSub(userId);
+      setRelatedClassSub(result);
+    };
+    loadData();
+  }, [userId]);
+
+  console.log(relatedClassSub);
+  // Extract unique classes
+  const classList = relatedClassSub
+    .filter((a) => a.classes) // remove null classes
+    .map((a) => ({ id: a.class_id, name: a.classes.name })); // use class_id as key
+
+  // remove duplicates
+  const uniqueClassList = classList.filter(
+    (cls, index, arr) => arr.findIndex((x) => x.id === cls.id) === index
+  );
+
+  // fetch classes
   useEffect(() => {
     const fetchClasses = async () => {
       const { data, error } = await supabase.from("classes").select("id, name");
@@ -93,8 +117,9 @@ export default function HomeworkCreateForm({
           className="select select-bordered w-full mb-2"
         >
           <option value="">Select Class</option>
-          {classes.map((cls) => (
-            <option key={cls.id} value={cls.id}>
+
+          {uniqueClassList.map((cls, index) => (
+            <option key={index} value={cls.id}>
               {cls.name}
             </option>
           ))}

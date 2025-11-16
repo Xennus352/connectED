@@ -26,10 +26,11 @@ const DriverProfile = () => {
 
   // destructure profile for easier access
   const profile = userData.profile;
+  const students = userData.students;
 
   return (
     <div>
-      <UserProfileCard profile={profile} />
+      <UserProfileCard profile={profile} students={students}/>
     </div>
   );
 };

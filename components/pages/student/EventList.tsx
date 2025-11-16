@@ -39,7 +39,7 @@ const EventList: React.FC = () => {
             avatar_url
           )
         `)
-        .order("event_date", { ascending: true });
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 

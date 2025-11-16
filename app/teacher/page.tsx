@@ -1,14 +1,15 @@
-'use client'
+"use client";
 import EventContainer from "@/components/pages/EventContainer";
 import AssignmentContainer from "@/components/pages/teacher/AssignmentContainer";
 import AttendanceContainer from "@/components/pages/teacher/AttendanceContainer";
 import StudentContainer from "@/components/pages/teacher/StudentContainer";
+import TeacherClassSubjectList from "@/components/pages/teacher/TeacherClassSubjectList";
 import TeacherNav from "@/components/pages/teacher/TeacherNav";
 import Tabs from "@/components/ui/Tabs";
 import React, { useState } from "react";
 
 const TeacherPage = () => {
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
   const tabItems = [
     {
       label: "👤 Students",
@@ -16,15 +17,19 @@ const TeacherPage = () => {
     },
     {
       label: "📃 Attendance",
-      content: <AttendanceContainer/>,
+      content: <AttendanceContainer searchTerm={searchTerm} />,
     },
     {
-      label: "📑 Assignments",
-      content: <AssignmentContainer/>,
+      label: "📑 Homeworks",
+      content: <AssignmentContainer />,
     },
     {
       label: "💭 Events",
       content: <EventContainer />,
+    },
+    {
+      label: "👨‍🏫 Class and Subject lists",
+      content: <TeacherClassSubjectList />,
     },
   ];
   return (

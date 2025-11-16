@@ -88,4 +88,32 @@ export interface ChatRoom {
   createdByAuthId: number;
 }
 
-export type User = Teacher | Parent | Student | Driver ;
+export type User = Teacher | Parent | Student | Driver;
+
+export interface ClassInfo {
+  id: string;
+  name: string;
+  academic_year: string;
+  head_teacher_id: string;
+}
+
+export interface StudentProfile {
+  full_name: string | null;
+  avatar_url: string | null;
+}
+
+export interface StudentInfo {
+  id: string;
+  student_id_number: string;
+  date_of_birth: string;
+  enrollment_date: string;
+  class_id: string;
+  profiles?: StudentProfile | null; 
+  classes: ClassInfo | null;
+}
+
+export interface ParentStudentRelation {
+  id: string; // id of student_parents row
+  relationship: string; 
+  students: StudentInfo; 
+}

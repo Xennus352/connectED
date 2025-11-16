@@ -12,6 +12,7 @@ const TeacherMessage = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [unreadCounts, setUnreadCounts] = useState<{ [key: string]: number }>({});
+  const [searchTerm, setSearchTerm] = useState("");
 
   // fetch all users + current user
   useEffect(() => {
@@ -98,6 +99,11 @@ const TeacherMessage = () => {
   const renderUserList = (role: string) => {
     const filtered = users.filter(
       (u) => u.role === role && u.id !== currentUserId
+    ) .filter((u) =>
+      searchTerm === ""
+        ? true
+        : u.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          u.phone?.includes(searchTerm)
     );
 
     if (filtered.length === 0) {
@@ -105,9 +111,14 @@ const TeacherMessage = () => {
         <div className="text-gray-400 p-4 text-center">No {role}s found</div>
       );
     }
+    const isSingle = filtered.length === 1;
 
     return (
-      <div className="grid h-[calc(100vh-200px)] overflow-y-auto gap-2 p-2">
+      <div className={
+        isSingle
+          ? "grid gap-2 p-2"
+          : "grid gap-2 overflow-y-auto h-[calc(100vh-200px)] p-2"
+      }>
         {filtered.map((u) => (
           <button
             key={u.id}
@@ -148,12 +159,30 @@ const TeacherMessage = () => {
   return (
     <div className="flex flex-col gap-1">
       <div>
-        <h3
-          className="bg-gradient-to-r from-[#56CCF2] to-[#2F80ED] bg-clip-text text-transparent 
+       {/* header section  */}
+        <div className="flex items-center justify-around">
+          <h3
+            className="bg-gradient-to-r from-[#56CCF2] to-[#2F80ED] bg-clip-text text-transparent 
           relative inline-block hover:before:w-full hover:before:transition-all hover:before:duration-300 before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:w-0 before:h-[2px] before:bg-[#3273ff] before:transform before:-translate-x-1/2 font-bold text-2xl italic p-2 mb-2 cursor-alias"
-        >
-          Contact Lists
-        </h3>
+          >
+            Contact Lists
+          </h3>
+          <div>
+            {/* search button  */}
+            <div className="flex items-center gap-3 ">
+              <input
+                type="text"
+                id="search"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                }}
+                placeholder="Search with name , phone .  .  ."
+                className="input focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
         <Tabs tabs={tabItems} defaultIndex={1} />
       </div>
 

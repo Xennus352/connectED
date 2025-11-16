@@ -1,3 +1,4 @@
+import AllTeacherClassSubject from "@/components/pages/AllTeacherClassSubject";
 import ClassContainer from "@/components/pages/ClassContainer";
 import CoursesContainer from "@/components/pages/CoursesContainer";
 import DashboardContainer from "@/components/pages/DashboardContainer";
@@ -32,6 +33,10 @@ const AdminPage = () => {
     {
       label: "📝 Assign Teachers",
       content: <TeacherClassContainer />,
+    },
+    {
+      label: "👨‍🏫 Teacher's Class and Subject ",
+      content: <AllTeacherClassSubject />,
     },
   ];
   return (
