@@ -1,4 +1,4 @@
-'use client";';
+'use client';
 import AssignmentList from "@/components/pages/student/AssignmentList";
 import EventList from "@/components/pages/student/EventList";
 import StudentNav from "@/components/pages/student/StudentNav";
