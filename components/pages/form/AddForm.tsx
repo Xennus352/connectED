@@ -7,6 +7,7 @@ import Step2RoleDetails from "./Step2RoleDetails";
 import Step3Review from "./Step3Review";
 import MultiStepFormContainer from "../../ui/MultiStepFormContainer";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 function AddForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,7 +75,20 @@ function AddForm() {
       if (result.error) {
         alert(`Error: ${result.error}`);
       } else {
-        alert(`User created successfully! User ID: ${result.userId}`);
+       // alert(`User created successfully! User ID: ${result.userId}`);
+        // Show toast only for the latest one
+       
+              Swal.fire({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                icon: "info",
+                title: `${result.message}`,
+                width: 250,
+                padding: "0.5rem",
+              });
         //  Reset the form after successful submission
         setFormData({
           email: "",
