@@ -26,6 +26,7 @@
     "react-hook-form": "^7.62.0",
     "react-leaflet": "^5.0.0",
     "react-markdown": "^10.1.0",
+    "react-tooltip": "^5.30.0",
     "remark-gfm": "^4.0.1",
     "sweetalert2": "^11.23.0",
     "uuid": "^11.1.0",

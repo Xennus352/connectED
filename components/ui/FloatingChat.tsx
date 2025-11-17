@@ -1,9 +1,10 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
+import { Bot, MessageCircle } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Tooltip } from "react-tooltip";
 
 interface Message {
   role: "user" | "assistant";
@@ -65,7 +66,12 @@ export default function FloatingChat() {
           className="fixed bottom-6 right-1 z-50 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 cursor-pointer"
           aria-label="Open chat"
         >
-          <MessageCircle />
+          {/* <MessageCircle /> <span>Ai Assistance</span> */}
+          <Bot
+            data-tooltip-id="chat-tooltip"
+            data-tooltip-content="AI Assistant Chat"
+          />
+          <Tooltip id="chat-tooltip" place="top" />
         </button>
       )}
 
